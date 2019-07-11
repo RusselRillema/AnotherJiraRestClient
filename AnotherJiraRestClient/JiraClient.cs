@@ -42,7 +42,7 @@ namespace AnotherJiraRestClient
         /// <returns>deserialized response of request</returns>
         public T Execute<T>(RestRequest request, HttpStatusCode expectedResponseCode) where T : new()
         {
-            // Won't throw exception.
+            // Won't throw exception. 
             var response = _client.Execute<T>(request);
 
             ValidateResponse(response);
@@ -286,6 +286,22 @@ namespace AnotherJiraRestClient
                 Method = Method.GET
             };
             return Execute<List<Version>>(request, HttpStatusCode.OK);
+        }
+
+        public PermissionSet MyPermissions(string projectKey)
+        {
+            var request = new RestRequest
+            {
+                Resource = ResourceUrls.MyPermissions(),
+                Method = Method.GET
+            };
+            request.AddParameter(new Parameter()
+            {
+                Name = "projectKey",
+                Value = projectKey,
+                Type = ParameterType.GetOrPost
+            });
+            return Execute<PermissionSet>(request, HttpStatusCode.OK);
         }
 
         /// <summary>

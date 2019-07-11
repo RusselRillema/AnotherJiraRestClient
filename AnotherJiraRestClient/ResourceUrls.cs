@@ -4,11 +4,16 @@ namespace AnotherJiraRestClient
 {
     public static class ResourceUrls
     {
-        private const string BaseUrl = "/rest/api/2/";
+        private const string BaseUrl = "/rest/api/latest/";
 
         public static string IssueByKey(string issueKey)
         {
             return Url($"issue/{issueKey}");
+        }
+
+        public static string MyPermissions()
+        {
+            return Url($"mypermissions");
         }
 
         public static string Issue()

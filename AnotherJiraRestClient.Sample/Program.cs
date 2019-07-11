@@ -1,4 +1,5 @@
 ﻿using AnotherJiraRestClient.JiraModel;
+using System.Collections.Generic;
 
 namespace AnotherJiraRestClient.Sample
 {
@@ -8,7 +9,15 @@ namespace AnotherJiraRestClient.Sample
 		{
 			JiraClient client = Client(args);
 
-			string projectKey = args[3];
+            var projects = client.GetProjects();
+            List<Project> createIssueInProject = new List<Project>();
+            foreach (var project in projects)
+            {
+                if (client.MyPermissions(project.key).permissions.CREATE_ISSUES.havePermission)
+                    createIssueInProject.Add(project);
+            }
+
+            string projectKey = "CLAPPS";//args[3];
 			string issueKey = projectKey + "-" + args[4];
 			string customFieldToUpdate = args[5];
 
@@ -25,9 +34,9 @@ namespace AnotherJiraRestClient.Sample
 
 		private static JiraClient Client(string[] args)
 		{
-			var jiraUrl = args[0];
-			var userName = args[1];
-			var password = args[2];
+            var jiraUrl = System.Configuration.ConfigurationSettings.AppSettings.Get("jiraUrl");
+            var userName = System.Configuration.ConfigurationSettings.AppSettings.Get("jiraUser");
+            var password = System.Configuration.ConfigurationSettings.AppSettings.Get("jiraPassword");
 
 			var client = new JiraClient(new JiraAccount
 			{
